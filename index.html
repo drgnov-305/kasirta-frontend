@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KasirTa' - Kasir Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════ -->
+<aside class="sidebar">
+
+  <div class="sidebar-logo">
+    <div class="logo-icon"><i class="fas fa-cash-register"></i></div>
+    <span>KasirTa'</span>
+  </div>
+
+  <p class="sidebar-section-label">Menu Utama</p>
+  <nav class="sidebar-nav">
+    <a class="active" onclick="showPage('kasir', this)">
+      <i class="fas fa-cash-register"></i> Kasir
+    </a>
+    <a onclick="showPage('laporan', this)">
+      <i class="fas fa-chart-bar"></i> Laporan
+    </a>
+    <a onclick="showPage('stok', this)">
+      <i class="fas fa-box-open"></i> Stok & Produk
+    </a>
+  </nav>
+
+  <div class="sidebar-divider"></div>
+
+  <p class="sidebar-section-label">Sistem</p>
+  <nav class="sidebar-nav">
+    <a onclick="showPage('pengaturan', this)">
+      <i class="fas fa-cog"></i> Pengaturan
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="kasir-label">Kasir Aktif</div>
+    <div class="kasir-name">Muh Ryan Ardiansyah</div>
+  </div>
+
+</aside>
+
+<!-- ═══════════════════════════════════
+     MAIN AREA
+═══════════════════════════════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="kantin-badge">
+        <span class="dot"></span>
+        Kantin UC Makassar
+      </span>
+      <div class="topbar-date" id="topbar-date"></div>
+    </div>
+    <div class="topbar-right">
+      <div class="status-badge status-online">
+        <span class="dot"></span> Online
+      </div>
+      <div class="status-badge status-offline">
+        <span class="dot"></span> Mode Offline Aktif
+      </div>
+      <div class="topbar-time" id="topbar-time"></div>
+      <div class="topbar-avatar"><i class="fas fa-user"></i></div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- MENU PANEL -->
+    <div class="menu-panel">
+
+      <!-- Search -->
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Cari Menu..." oninput="filterMenu()"/>
+      </div>
+
+      <!-- Filter Kategori -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="setFilter('Semua', this)">Semua</button>
+        <button class="filter-tab" onclick="setFilter('Makanan', this)">Makanan</button>
+        <button class="filter-tab" onclick="setFilter('Minuman', this)">Minuman</button>
+        <button class="filter-tab" onclick="setFilter('Snack', this)">Snack</button>
+      </div>
+
+      <!-- Grid Menu -->
+      <div class="menu-grid" id="menuGrid"></div>
+
+    </div>
+
+    <!-- CART PANEL -->
+    <div class="cart-panel">
+
+      <div class="cart-header">
+        <div>
+          <h3>Keranjang</h3>
+          <div class="trx-id" id="trxId"></div>
+        </div>
+        <button class="kosongkan-btn" onclick="clearCart()">Kosongkan</button>
+      </div>
+
+      <div class="cart-items" id="cartItems">
+        <!-- Diisi oleh JavaScript -->
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-summary">
+          <div class="cart-row">
+            <span class="label">Subtotal</span>
+            <span class="val" id="subtotalVal">Rp 0</span>
+          </div>
+          <div class="cart-row">
+            <span class="label">Diskon</span>
+            <span class="val diskon" id="diskonVal">-Rp 0</span>
+          </div>
+        </div>
+        <div class="cart-total">
+          <span class="label">Total</span>
+          <span class="val" id="totalVal">Rp 0</span>
+        </div>
+        <button class="btn-bayar" id="btnBayar" onclick="openConfirmModal()" disabled>
+          <i class="fas fa-print"></i> Bayar & Cetak Struk
+        </button>
+        <button class="btn-wa" onclick="notifWA()">
+          <i class="fab fa-whatsapp"></i> Notifikasi WA otomatis ke pemilik
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MODAL KONFIRMASI
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal">
+    <div class="modal-icon confirm"><i class="fas fa-receipt"></i></div>
+    <h3>Konfirmasi Pembayaran</h3>
+    <div class="modal-amount" id="modalAmount">Rp 0</div>
+    <p>Pastikan jumlah pembayaran sudah sesuai sebelum melanjutkan.</p>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeConfirmModal()">Batal</button>
+      <button class="modal-btn-confirm" onclick="confirmPayment()">Konfirmasi</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MODAL SUKSES
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="modal-icon success"><i class="fas fa-check"></i></div>
+    <h3>Transaksi Berhasil!</h3>
+    <div class="modal-amount" id="successAmount">Rp 0</div>
+    <p>Struk telah dicetak. Terima kasih!</p>
+    <div class="modal-actions">
+      <button class="modal-btn-new" onclick="newTransaction()">Transaksi Baru</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST NOTIFIKASI -->
+<div class="toast" id="toast"></div>
+
+<!-- JavaScript -->
+<script src="app.js"></script>
+
+</body>
+</html>
