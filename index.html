@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KasirTa' - Kasir Page</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
 </head>
@@ -16,7 +16,9 @@
 <aside class="sidebar">
 
   <div class="sidebar-logo">
-    <div class="logo-icon"><i class="fas fa-cash-register"></i></div>
+    <div class="logo-icon">
+    <img src="assets/Group.png" alt="KasirTa' Logo" class="logo-img"/>
+  </div>
     <span>KasirTa'</span>
   </div>
 
@@ -143,33 +145,80 @@
 </div>
 
 <!-- ═══════════════════════════════════
-     MODAL KONFIRMASI
+     MODAL KONFIRMASI PEMBAYARAN
 ═══════════════════════════════════ -->
 <div class="modal-overlay" id="confirmModal">
-  <div class="modal">
-    <div class="modal-icon confirm"><i class="fas fa-receipt"></i></div>
-    <h3>Konfirmasi Pembayaran</h3>
-    <div class="modal-amount" id="modalAmount">Rp 0</div>
-    <p>Pastikan jumlah pembayaran sudah sesuai sebelum melanjutkan.</p>
+  <div class="modal modal-konfirmasi">
+
+    <h3 class="modal-title">Konfirmasi Pembayaran</h3>
+
+    <!-- Nominal Total -->
+    <div class="modal-nominal-box">
+      <div class="modal-nominal" id="modalAmount">Rp 0</div>
+    </div>
+
+    <!-- Input Uang Bayar -->
+    <div class="modal-input-group">
+      <label>Uang Bayar</label>
+      <div class="modal-input-wrap">
+        <span class="modal-input-prefix">Rp</span>
+        <input type="number" id="uangBayarInput" placeholder="0"
+               oninput="hitungKembalian()" min="0"/>
+      </div>
+    </div>
+
+    <!-- Kembalian -->
+    <div class="modal-kembalian-row">
+      <span>Kembalian</span>
+      <span class="modal-kembalian-val" id="kembalianVal">Rp 0</span>
+    </div>
+
+    <!-- Tombol Aksi -->
     <div class="modal-actions">
       <button class="modal-btn-cancel" onclick="closeConfirmModal()">Batal</button>
-      <button class="modal-btn-confirm" onclick="confirmPayment()">Konfirmasi</button>
+      <button class="modal-btn-proses" id="btnProses" onclick="confirmPayment()" disabled>
+        <i class="fas fa-print"></i> Proses & Cetak Struk
+      </button>
     </div>
+
   </div>
 </div>
 
 <!-- ═══════════════════════════════════
-     MODAL SUKSES
+     MODAL TRANSAKSI BERHASIL
 ═══════════════════════════════════ -->
 <div class="modal-overlay" id="successModal">
-  <div class="modal">
-    <div class="modal-icon success"><i class="fas fa-check"></i></div>
-    <h3>Transaksi Berhasil!</h3>
-    <div class="modal-amount" id="successAmount">Rp 0</div>
-    <p>Struk telah dicetak. Terima kasih!</p>
-    <div class="modal-actions">
-      <button class="modal-btn-new" onclick="newTransaction()">Transaksi Baru</button>
+  <div class="modal modal-sukses">
+
+    <!-- Icon centang -->
+    <div class="modal-check-icon">
+      <i class="fas fa-check"></i>
     </div>
+
+    <h3 class="modal-title">Transaksi Berhasil</h3>
+    <div class="modal-trx-id" id="successTrxId">#TRX-000-2026-0409</div>
+
+    <!-- Nominal -->
+    <div class="modal-nominal" id="successAmount">Rp 0</div>
+
+    <!-- Kembalian -->
+    <div class="modal-kembalian-row success-row">
+      <span>Kembalian: </span>
+      <span id="successKembalian">Rp 0</span>
+    </div>
+
+    <!-- Info struk & WA -->
+    <div class="modal-info-bar">
+      <i class="fas fa-print"></i> Struk sedang dicetak
+      <span class="modal-divider-dot">|</span>
+      <i class="fab fa-whatsapp"></i> Notifikasi WA terkirim ke pemilik
+    </div>
+
+    <!-- Tombol Transaksi Baru -->
+    <button class="modal-btn-new" onclick="newTransaction()">
+      Transaksi Baru
+    </button>
+
   </div>
 </div>
 

@@ -19,24 +19,94 @@
    1. DATA MENU
 ───────────────────────────── */
 const menuData = [
-  { id: 1,  name: "Nasi Goreng",      emoji: "🍳", category: "Makanan",  price: 15000 },
-  { id: 2,  name: "Nasi Ayam Geprek", emoji: "🍗", category: "Makanan",  price: 18000 },
-  { id: 3,  name: "Mie Goreng Jawa",  emoji: "🍜", category: "Makanan",  price: 13000 },
-  { id: 4,  name: "Soto Ayam",        emoji: "🥣", category: "Makanan",  price: 14000 },
-  { id: 5,  name: "Es Teh Manis",     emoji: "🧋", category: "Minuman",  price: 5000  },
-  { id: 6,  name: "Es Jeruk",         emoji: "🍊", category: "Minuman",  price: 6000  },
-  { id: 7,  name: "Jus Alpukat",      emoji: "🥑", category: "Minuman",  price: 10000 },
-  { id: 8,  name: "Pisang Goreng",    emoji: "🍌", category: "Snack",    price: 8000  },
-  { id: 9,  name: "Cireng Goreng",    emoji: "🧆", category: "Snack",    price: 7000  },
-  { id: 10, name: "Keripik Tempe",    emoji: "🥜", category: "Snack",    price: 5000  },
+  {
+    id: 1,
+    name: "Nasi Goreng",
+    emoji: "🍳",
+    image: "assets/nasigoreng.png",
+    category: "Makanan",
+    price: 15000
+  },
+  {
+    id: 2,
+    name: "Nasi Ayam Geprek",
+    emoji: "🍗",
+    image: "assets/ayam.png",
+    category: "Makanan",
+    price: 18000
+  },
+  {
+    id: 3,
+    name: "Mie Goreng Jawa",
+    emoji: "🍜",
+    image: "assets/mie.png",
+    category: "Makanan",
+    price: 13000
+  },
+  {
+    id: 4,
+    name: "Soto Ayam",
+    emoji: "🥣",
+    image: "",
+    category: "Makanan",
+    price: 14000
+  },
+  {
+    id: 5,
+    name: "Es Teh Manis",
+    emoji: "🧋",
+    image: "assets/esteh.png",
+    category: "Minuman",
+    price: 5000
+  },
+  {
+    id: 6,
+    name: "Es Jeruk",
+    emoji: "🍊",
+    image: "assets/jusjeruk.png",
+    category: "Minuman",
+    price: 6000
+  },
+  {
+    id: 7,
+    name: "Jus Alpukat",
+    emoji: "🥑",
+    image: "",
+    category: "Minuman",
+    price: 10000
+  },
+  {
+    id: 8,
+    name: "Pisang Goreng",
+    emoji: "🍌",
+    image: "assets/pisang.png",
+    category: "Snack",
+    price: 8000
+  },
+  {
+    id: 9,
+    name: "Cireng Goreng",
+    emoji: "🧆",
+    image: "assets/cireng.png",
+    category: "Snack",
+    price: 7000
+  },
+  {
+    id: 10,
+    name: "Keripik Tempe",
+    emoji: "🥜",
+    image: "",
+    category: "Snack",
+    price: 5000
+  },
 ];
 
 /* ─────────────────────────────
    2. STATE / VARIABEL GLOBAL
 ───────────────────────────── */
-let cart          = [];       // isi keranjang belanja
-let currentFilter = "Semua"; // filter kategori aktif
-let searchQuery   = "";       // kata kunci pencarian
+let cart          = [];
+let currentFilter = "Semua";
+let searchQuery   = "";
 
 /* ─────────────────────────────
    3. JAM & TANGGAL REAL-TIME
@@ -70,14 +140,12 @@ function genTrxId() {
 function renderMenu() {
   const grid = document.getElementById('menuGrid');
 
-  // Filter berdasarkan kategori & pencarian
   const filtered = menuData.filter(item => {
     const cocokKategori = currentFilter === "Semua" || item.category === currentFilter;
     const cocokSearch   = item.name.toLowerCase().includes(searchQuery.toLowerCase());
     return cocokKategori && cocokSearch;
   });
 
-  // Tampilkan pesan jika tidak ada hasil
   if (filtered.length === 0) {
     grid.innerHTML = `
       <div style="grid-column: 1/-1; text-align:center; color: var(--text-muted); padding: 40px 0;">
@@ -87,33 +155,54 @@ function renderMenu() {
     return;
   }
 
-  // Render kartu menu
-  grid.innerHTML = filtered.map(item => `
-    <div class="menu-card" onclick="addToCart(${item.id})">
-      <div class="food-emoji">${item.emoji}</div>
-      <div class="name">${item.name}</div>
-      <div class="price">${formatRupiah(item.price)}</div>
-      <div class="add-btn"><i class="fas fa-plus"></i></div>
-    </div>
-  `).join('');
+  grid.innerHTML = filtered.map(item => {
+    const cartItem = cart.find(c => c.id === item.id);
+    const qty      = cartItem ? cartItem.qty : 0;
+
+    const bottomControl = qty > 0
+      ? `<div class="menu-card-qty-badge">${qty}</div>`
+      : `<button class="menu-card-add-btn" onclick="event.stopPropagation(); addToCart(${item.id})">
+           <i class="fas fa-plus"></i>
+         </button>`;
+
+    return `
+      <div class="menu-card ${qty > 0 ? 'in-cart' : ''}" onclick="addToCart(${item.id})">
+
+        <!-- Foto makanan -->
+        <div class="menu-card-img-wrap">
+          <img
+            src="${item.image}"
+            alt="${item.name}"
+            class="menu-card-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="menu-card-img-fallback" style="display:none;">${item.emoji}</div>
+        </div>
+
+        <!-- Info nama & harga -->
+        <div class="menu-card-info">
+          <div class="name">${item.name}</div>
+          <div class="price">${formatRupiah(item.price)}</div>
+        </div>
+
+        <!-- Kontrol bawah -->
+        ${bottomControl}
+
+      </div>
+    `;
+  }).join('');
 }
 
 /* ─────────────────────────────
    6. FILTER & SEARCH
 ───────────────────────────── */
-
-// Klik tab kategori
 function setFilter(kategori, elButton) {
   currentFilter = kategori;
-
-  // Reset semua tab, aktifkan yang diklik
   document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
   elButton.classList.add('active');
-
   renderMenu();
 }
 
-// Ketik di search bar
 function filterMenu() {
   searchQuery = document.getElementById('searchInput').value;
   renderMenu();
@@ -122,64 +211,66 @@ function filterMenu() {
 /* ─────────────────────────────
    7. KERANJANG (CART)
 ───────────────────────────── */
-
-// Tambah item ke keranjang
 function addToCart(id) {
   const menu     = menuData.find(item => item.id === id);
   const existing = cart.find(item => item.id === id);
 
   if (existing) {
-    existing.qty++; // sudah ada → tambah qty
+    existing.qty++;
   } else {
-    cart.push({ ...menu, qty: 1 }); // belum ada → masukkan baru
+    cart.push({ ...menu, qty: 1 });
   }
 
+  renderMenu();   // re-render supaya badge qty terupdate
   renderCart();
   showToast(`${menu.emoji} ${menu.name} ditambahkan`);
 }
 
-// Ubah jumlah item (delta: +1 atau -1)
 function changeQty(id, delta) {
   const index = cart.findIndex(item => item.id === id);
   if (index === -1) return;
 
   cart[index].qty += delta;
 
-  // Hapus dari keranjang jika qty = 0
   if (cart[index].qty <= 0) {
     cart.splice(index, 1);
   }
 
+  renderMenu();   // update badge di grid
   renderCart();
 }
 
-// Kosongkan seluruh keranjang
 function clearCart() {
   if (cart.length === 0) return;
   cart = [];
+  renderMenu();
   renderCart();
   showToast("Keranjang dikosongkan");
 }
 
-// Render ulang tampilan keranjang
 function renderCart() {
   const container = document.getElementById('cartItems');
   const btnBayar  = document.getElementById('btnBayar');
 
   if (cart.length === 0) {
-    // Tampilkan state kosong
     container.innerHTML = `
       <div class="cart-empty">
         <div class="bag-icon"><i class="fas fa-shopping-bag"></i></div>
         <p>Pilih menu untuk<br>mulai transaksi</p>
       </div>`;
     btnBayar.disabled = true;
-
   } else {
-    // Render daftar item
     container.innerHTML = cart.map(item => `
       <div class="cart-item">
-        <div class="item-emoji">${item.emoji}</div>
+        <div class="item-img-wrap">
+          <img
+            src="${item.image}"
+            alt="${item.name}"
+            class="item-img"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="item-img-fallback" style="display:none;">${item.emoji}</div>
+        </div>
         <div class="item-info">
           <div class="item-name">${item.name}</div>
           <div class="item-price">${formatRupiah(item.price * item.qty)}</div>
@@ -194,51 +285,87 @@ function renderCart() {
     btnBayar.disabled = false;
   }
 
-  // Hitung & tampilkan subtotal, diskon, total
   updateCartSummary();
 }
 
-// Update ringkasan harga di bawah keranjang
 function updateCartSummary() {
   const subtotal = cart.reduce((total, item) => total + item.price * item.qty, 0);
-  const diskon   = 0; // bisa diubah sesuai logika diskon
+  const diskon   = 0;
   const total    = subtotal - diskon;
 
-  document.getElementById('subtotalVal').textContent  = formatRupiah(subtotal);
-  document.getElementById('diskonVal').textContent    = `-${formatRupiah(diskon)}`;
-  document.getElementById('totalVal').textContent     = formatRupiah(total);
-  document.getElementById('modalAmount').textContent  = formatRupiah(total);
+  document.getElementById('subtotalVal').textContent   = formatRupiah(subtotal);
+  document.getElementById('diskonVal').textContent     = `-${formatRupiah(diskon)}`;
+  document.getElementById('totalVal').textContent      = formatRupiah(total);
+  document.getElementById('modalAmount').textContent   = formatRupiah(total);
   document.getElementById('successAmount').textContent = formatRupiah(total);
 }
 
 /* ─────────────────────────────
    8. MODAL
 ───────────────────────────── */
-
-// Buka modal konfirmasi bayar
 function openConfirmModal() {
+  document.getElementById('uangBayarInput').value = '';
+  document.getElementById('kembalianVal').textContent = 'Rp 0';
+  document.getElementById('kembalianVal').classList.remove('kurang');
+  document.getElementById('btnProses').disabled = true;
+
+  const total = cart.reduce((s, item) => s + item.price * item.qty, 0);
+  document.getElementById('modalAmount').textContent = formatRupiah(total);
+
   document.getElementById('confirmModal').classList.add('active');
+  setTimeout(() => document.getElementById('uangBayarInput').focus(), 200);
 }
 
-// Tutup modal konfirmasi
+function hitungKembalian() {
+  const total     = cart.reduce((s, item) => s + item.price * item.qty, 0);
+  const uangBayar = parseInt(document.getElementById('uangBayarInput').value) || 0;
+  const kembalian = uangBayar - total;
+
+  const elKembalian = document.getElementById('kembalianVal');
+  const btnProses   = document.getElementById('btnProses');
+
+  if (uangBayar === 0) {
+    elKembalian.textContent = 'Rp 0';
+    elKembalian.classList.remove('kurang');
+    btnProses.disabled = true;
+  } else if (kembalian < 0) {
+    elKembalian.textContent = `Kurang ${formatRupiah(Math.abs(kembalian))}`;
+    elKembalian.classList.add('kurang');
+    btnProses.disabled = true;
+  } else {
+    elKembalian.textContent = formatRupiah(kembalian);
+    elKembalian.classList.remove('kurang');
+    btnProses.disabled = false;
+  }
+}
+
 function closeConfirmModal() {
   document.getElementById('confirmModal').classList.remove('active');
 }
 
-// Konfirmasi pembayaran → tampilkan sukses
 function confirmPayment() {
+  const total     = cart.reduce((s, item) => s + item.price * item.qty, 0);
+  const uangBayar = parseInt(document.getElementById('uangBayarInput').value) || 0;
+  const kembalian = uangBayar - total;
+  const trxId     = document.getElementById('trxId').textContent;
+
+  document.getElementById('successAmount').textContent    = formatRupiah(total);
+  document.getElementById('successKembalian').textContent = formatRupiah(kembalian);
+  document.getElementById('successTrxId').textContent     = trxId;
+
   closeConfirmModal();
   setTimeout(() => {
     document.getElementById('successModal').classList.add('active');
   }, 200);
 }
 
-// Mulai transaksi baru setelah sukses
 function newTransaction() {
   document.getElementById('successModal').classList.remove('active');
   cart = [];
+  renderMenu();
   renderCart();
-  document.getElementById('trxId').textContent = genTrxId();
+  const newId = genTrxId();
+  document.getElementById('trxId').textContent = newId;
   showToast("Siap transaksi baru! 🎉");
 }
 
@@ -246,13 +373,11 @@ function newTransaction() {
    9. NAVIGASI SIDEBAR
 ───────────────────────────── */
 function showPage(page, elLink) {
-  // Update class active di sidebar
   document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
   elLink.classList.add('active');
 
-  // Placeholder — tambahkan logika multi-halaman di sini
   if (page !== 'kasir') {
-    showToast(`Halaman "${page}" belum tersedia`);
+    showToast(`Halaman "${page}" belum tersedia di demo ini`);
   }
 }
 
@@ -271,7 +396,6 @@ function showToast(pesan) {
   toast.textContent = pesan;
   toast.classList.add('show');
 
-  // Auto hilang setelah 2.5 detik
   clearTimeout(toast._timer);
   toast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
 }
@@ -287,19 +411,11 @@ function formatRupiah(angka) {
    13. INISIALISASI
 ───────────────────────────── */
 function init() {
-  // Set jam & tanggal real-time
   updateClock();
   setInterval(updateClock, 1000);
-
-  // Set ID transaksi awal
   document.getElementById('trxId').textContent = genTrxId();
-
-  // Render menu pertama kali
   renderMenu();
-
-  // Render keranjang kosong
   renderCart();
 }
 
-// Jalankan saat halaman siap
 document.addEventListener('DOMContentLoaded', init);
