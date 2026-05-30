@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KasirTa' - Pengaturan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../style.css"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════ -->
+<aside class="sidebar">
+
+  <div class="sidebar-logo">
+    <img src="../img/logo.png" alt="KasirTa'" class="sidebar-logo-img"/>
+  </div>
+
+  <p class="sidebar-section-label">Menu Utama</p>
+  <nav class="sidebar-nav">
+    <a href="../index.html">
+      <i class="fas fa-cash-register"></i> Kasir
+    </a>
+    <a href="../laporan-page/laporan-page.html">
+      <i class="fas fa-chart-bar"></i> Laporan
+    </a>
+    <a href="../stok-page/stok-page.html">
+      <i class="fas fa-box-open"></i> Stok & Produk
+    </a>
+  </nav>
+
+  <div class="sidebar-divider"></div>
+
+  <p class="sidebar-section-label">Sistem</p>
+  <nav class="sidebar-nav">
+    <a href="pengaturan-page.html" class="active">
+      <i class="fas fa-cog"></i> Pengaturan
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="kasir-label">Kasir Aktif</div>
+    <div class="kasir-name">Muh Ryan Ardiansyah</div>
+  </div>
+
+</aside>
+
+<!-- ═══════════════════════════════════
+     MAIN AREA
+═══════════════════════════════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="kantin-badge">
+        <span class="dot"></span>
+        Kantin UC Makassar
+      </span>
+      <div class="topbar-date" id="topbar-date"></div>
+    </div>
+    <div class="topbar-right">
+      <div class="status-badge status-online">
+        <span class="dot"></span> Online
+      </div>
+      <div class="status-badge status-offline">
+        <span class="dot"></span> Mode Offline Aktif
+      </div>
+      <div class="topbar-time" id="topbar-time"></div>
+      <div class="topbar-avatar"><i class="fas fa-user"></i></div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content-page">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Pengaturan</h1>
+        <p class="page-subtitle">Konfigurasi Toko, Printer, Notifikasi, dan akun</p>
+      </div>
+      <div class="page-actions">
+        <button class="btn-primary-green" onclick="simpanPengaturan()">
+          Simpan Perubahan
+        </button>
+      </div>
+    </div>
+
+    <div class="pengaturan-layout">
+
+      <!-- SIDEBAR PENGATURAN -->
+      <div class="pengaturan-nav">
+        <div class="pnav-item active" onclick="showPanel('info', this)">
+          <i class="fas fa-store"></i> Info Toko
+        </div>
+      </div>
+
+      <!-- PANEL KONTEN -->
+      <div class="pengaturan-panels">
+
+        <!-- PANEL: INFO TOKO -->
+        <div class="panel-section" id="panel-info">
+
+          <!-- INFORMASI TOKO -->
+          <div class="setting-card">
+            <div class="setting-card-title">
+              <i class="fas fa-store"></i> Informasi Toko
+            </div>
+            <div class="setting-form-grid">
+              <div class="form-group">
+                <label class="form-label">Nama Toko</label>
+                <input class="form-input" type="text" id="set-nama" placeholder="contoh: Kantin UC Makassar" value="Kantin UC Makassar"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tipe Usaha</label>
+                <input class="form-input" type="text" id="set-tipe" placeholder="contoh: Kantin / Warung Makan" value="Kantin / Warung Makan"/>
+              </div>
+            </div>
+            <div class="setting-form-grid">
+              <div class="form-group">
+                <label class="form-label">Alamat</label>
+                <input class="form-input" type="text" id="set-alamat" placeholder="Alamat lengkap toko" value="Universitas Ciputra, Jl. Citraland, Makassar"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nomor Telepon</label>
+                <input class="form-input" type="text" id="set-telp" placeholder="contoh: 0812-3456-7890"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Pesan Footer Struk</label>
+              <input class="form-input" type="text" id="set-footer" placeholder="Pesan yang muncul di bawah struk" value="Terima kasih sudah berkunjung! — Kantin UC Makassar"/>
+            </div>
+            <div class="form-group" style="max-width: 280px;">
+              <label class="form-label">Mata Uang</label>
+              <input class="form-input" type="text" id="set-matauang" value="IDR (Rupiah)" readonly/>
+            </div>
+          </div>
+
+          <!-- PRINTER THERMAL -->
+          <div class="setting-card">
+            <div class="setting-card-title">
+              <i class="fas fa-print"></i> Printer Thermal Mini
+            </div>
+            <div class="printer-connected-card">
+              <div class="printer-icon-box">
+                <i class="fas fa-print"></i>
+              </div>
+              <div class="printer-info">
+                <div class="printer-name">Printer-ABCD123</div>
+                <div class="printer-status">terhubung via USB — siap cetak!</div>
+              </div>
+              <span class="printer-badge">Terhubung</span>
+            </div>
+          </div>
+
+          <!-- NOTIFIKASI WHATSAPP -->
+          <div class="setting-card">
+            <div class="setting-card-title">
+              <i class="fab fa-whatsapp"></i> Notifikasi WhatsApp Otomatis
+            </div>
+            <div class="wa-input-card">
+              <div class="form-group" style="margin-bottom:0; flex:1;">
+                <label class="form-label">Nomor WA Pemilik (Penerima Laporan)</label>
+                <input class="form-input" type="text" id="set-wa" placeholder="contoh: 0812-3456-7890"/>
+              </div>
+              <button class="btn-verifikasi" onclick="verifikasiWA()">Verifikasi Ulang</button>
+            </div>
+
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-title">Laporan harian otomatis</div>
+                <div class="toggle-desc">Kirim rekap penjualan setiap pukul 21.00 ke nomor pemilik</div>
+              </div>
+              <div class="toggle-switch on" id="toggle-laporan" onclick="toggleSwitch('toggle-laporan')"></div>
+            </div>
+
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-title">Notifikasi Stok Menipis</div>
+                <div class="toggle-desc">Kirim WA otomatis ketika produk di bawah batas minimum</div>
+              </div>
+              <div class="toggle-switch on" id="toggle-stok" onclick="toggleSwitch('toggle-stok')"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="../app.js"></script>
+<script src="pengaturan.js"></script>
+</body>
+</html>

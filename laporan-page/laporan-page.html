@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KasirTa' - Laporan Penjualan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../style.css"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════ -->
+<aside class="sidebar">
+
+  <div class="sidebar-logo">
+    <img src="../img/logo.png" alt="KasirTa'" class="sidebar-logo-img"/>
+  </div>
+
+  <p class="sidebar-section-label">Menu Utama</p>
+  <nav class="sidebar-nav">
+    <a href="../index.html">
+      <i class="fas fa-cash-register"></i> Kasir
+    </a>
+    <a href="laporan-page.html" class="active">
+      <i class="fas fa-chart-bar"></i> Laporan
+    </a>
+    <a href="../stok-page/stok-page.html">
+      <i class="fas fa-box-open"></i> Stok & Produk
+    </a>
+  </nav>
+
+  <div class="sidebar-divider"></div>
+
+  <p class="sidebar-section-label">Sistem</p>
+  <nav class="sidebar-nav">
+    <a href="#">
+      <i class="fas fa-cog"></i> Pengaturan
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="kasir-label">Kasir Aktif</div>
+    <div class="kasir-name">Muh Ryan Ardiansyah</div>
+  </div>
+
+</aside>
+
+<!-- ═══════════════════════════════════
+     MAIN AREA
+═══════════════════════════════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="kantin-badge">
+        <span class="dot"></span>
+        Kantin UC Makassar
+      </span>
+      <div class="topbar-date" id="topbar-date"></div>
+    </div>
+    <div class="topbar-right">
+      <div class="status-badge status-online">
+        <span class="dot"></span> Online
+      </div>
+      <div class="status-badge status-offline">
+        <span class="dot"></span> Mode Offline Aktif
+      </div>
+      <div class="topbar-time" id="topbar-time"></div>
+      <div class="topbar-avatar"><i class="fas fa-user"></i></div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content-page">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Laporan Penjualan</h1>
+        <p class="page-subtitle">Rekap harian &amp; histori transaksi real-time</p>
+      </div>
+      <div class="page-actions">
+        <button class="btn-outline" onclick="eksporPDF()">
+          <i class="fas fa-download"></i> Ekspor PDF
+        </button>
+        <button class="btn-outline green" onclick="kirimWA()">
+          <i class="fab fa-whatsapp"></i> Kirim via WA
+        </button>
+      </div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Pendapatan Hari Ini</div>
+        <div class="stat-value sv-green" id="totalPendapatan">Rp 0</div>
+        <div class="stat-hint" id="hintPendapatan">+0 transaksi baru</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Jumlah Transaksi</div>
+        <div class="stat-value sv-amber" id="totalTrx">0</div>
+        <div class="stat-hint">transaksi hari ini</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Rata-rata / Transaksi</div>
+        <div class="stat-value sv-green" id="avgTrx">Rp 0</div>
+        <div class="stat-hint">per transaksi</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Menu Terlaris</div>
+        <div class="stat-value sv-dark" id="topMenu">—</div>
+        <div class="stat-hint" id="topMenuCount">0 terjual</div>
+      </div>
+    </div>
+
+    <!-- GRAFIK 7 HARI -->
+    <div class="laporan-card">
+      <div class="laporan-card-title">Penjualan 7 Hari Terakhir</div>
+      <div class="bar-chart">
+        <div class="bar-row"><span class="bar-day">Sen</span><div class="bar-track"><div class="bar-fill" id="bar-sen"></div></div><span class="bar-val" id="val-sen">Rp 0</span></div>
+        <div class="bar-row"><span class="bar-day">Sel</span><div class="bar-track"><div class="bar-fill" id="bar-sel"></div></div><span class="bar-val" id="val-sel">Rp 0</span></div>
+        <div class="bar-row"><span class="bar-day">Rab</span><div class="bar-track"><div class="bar-fill" id="bar-rab"></div></div><span class="bar-val" id="val-rab">Rp 0</span></div>
+        <div class="bar-row"><span class="bar-day">Kam</span><div class="bar-track"><div class="bar-fill" id="bar-kam"></div></div><span class="bar-val" id="val-kam">Rp 0</span></div>
+        <div class="bar-row"><span class="bar-day">Jum</span><div class="bar-track"><div class="bar-fill" id="bar-jum"></div></div><span class="bar-val" id="val-jum">Rp 0</span></div>
+        <div class="bar-row"><span class="bar-day">Sab</span><div class="bar-track"><div class="bar-fill" id="bar-sab"></div></div><span class="bar-val" id="val-sab">Rp 0</span></div>
+        <div class="bar-row"><span class="bar-day">Min</span><div class="bar-track"><div class="bar-fill" id="bar-min"></div></div><span class="bar-val" id="val-min">Rp 0</span></div>
+      </div>
+    </div>
+
+    <!-- HISTORI TRANSAKSI -->
+    <div class="laporan-card">
+      <div class="laporan-card-title">Histori Transaksi</div>
+      <div id="historiTrx">
+        <div class="empty-histori">Belum ada transaksi hari ini.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="../app.js"></script>
+<script src="laporan.js"></script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KasirTa' - Stok & Produk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../style.css"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════ -->
+<aside class="sidebar">
+
+  <div class="sidebar-logo">
+    <img src="../img/logo.png" alt="KasirTa'" class="sidebar-logo-img"/>
+  </div>
+
+  <p class="sidebar-section-label">Menu Utama</p>
+  <nav class="sidebar-nav">
+    <a href="../index.html">
+      <i class="fas fa-cash-register"></i> Kasir
+    </a>
+    <a href="../laporan-page/laporan-page.html">
+      <i class="fas fa-chart-bar"></i> Laporan
+    </a>
+    <a href="stok-page.html" class="active">
+      <i class="fas fa-box-open"></i> Stok & Produk
+    </a>
+  </nav>
+
+  <div class="sidebar-divider"></div>
+
+  <p class="sidebar-section-label">Sistem</p>
+  <nav class="sidebar-nav">
+    <a href="../pengaturan-page/pengaturan-page.html">
+      <i class="fas fa-cog"></i> Pengaturan
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="kasir-label">Kasir Aktif</div>
+    <div class="kasir-name">Muh Ryan Ardiansyah</div>
+  </div>
+
+</aside>
+
+<!-- ═══════════════════════════════════
+     MAIN AREA
+═══════════════════════════════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="kantin-badge">
+        <span class="dot"></span>
+        Kantin UC Makassar
+      </span>
+      <div class="topbar-date" id="topbar-date"></div>
+    </div>
+    <div class="topbar-right">
+      <div class="status-badge status-online">
+        <span class="dot"></span> Online
+      </div>
+      <div class="status-badge status-offline">
+        <span class="dot"></span> Mode Offline Aktif
+      </div>
+      <div class="topbar-time" id="topbar-time"></div>
+      <div class="topbar-avatar"><i class="fas fa-user"></i></div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content-page">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Stok & Produk</h1>
+        <p class="page-subtitle">Kelola Inventoris &amp; Pantau stok real-time</p>
+      </div>
+      <div class="page-actions">
+        <button class="btn-outline" onclick="importCSV()">
+          Import CSV
+        </button>
+        <button class="btn-primary-green" onclick="simpanPerubahan()">
+          <i class="fas fa-plus"></i> Simpan Perubahan
+        </button>
+      </div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Produk</div>
+        <div class="stat-value sv-dark" id="statTotalProduk">0</div>
+        <div class="stat-hint" id="statKategori">0 kategori</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Stok Aman</div>
+        <div class="stat-value sv-green" id="statAman">0</div>
+        <div class="stat-hint">produk</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Stok Menipis</div>
+        <div class="stat-value sv-amber" id="statMenipis">0</div>
+        <div class="stat-hint">perlu restock</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Stok Habis</div>
+        <div class="stat-value sv-red" id="statHabis">0</div>
+        <div class="stat-hint">tidak bisa dijual</div>
+      </div>
+    </div>
+
+    <!-- TABEL STOK -->
+    <div class="stok-table-card">
+      <table class="stok-table">
+        <thead>
+          <tr>
+            <th>Nama Produk</th>
+            <th>Kategori</th>
+            <th>Stok</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="stokTableBody">
+          <tr>
+            <td colspan="5" class="empty-stok">Belum ada data produk.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="../app.js"></script>
+<script src="stok.js"></script>
+</body>
+</html>

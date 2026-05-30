@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KasirTa' - Kasir Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════ -->
+<aside class="sidebar">
+
+  <div class="sidebar-logo">
+    <img src="/img/logo.png" alt="KasirTa'" class="sidebar-logo-img"/>
+  </div>
+
+  <p class="sidebar-section-label">Menu Utama</p>
+  <nav class="sidebar-nav">
+    <a class="active" onclick="showPage('kasir', this)">
+      <i class="fas fa-cash-register"></i> Kasir
+    </a>
+    <a href="laporan-page/laporan-page.html">
+      <i class="fas fa-chart-bar"></i> Laporan
+    </a>
+    <a href="stok-page/stok-page.html">
+      <i class="fas fa-box-open"></i> Stok & Produk
+    </a>
+  </nav>
+
+  <div class="sidebar-divider"></div>
+
+  <p class="sidebar-section-label">Sistem</p>
+  <nav class="sidebar-nav">
+    <a href="pengaturan-page/pengaturan-page.html">
+      <i class="fas fa-cog"></i> Pengaturan
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="kasir-label">Kasir Aktif</div>
+    <div class="kasir-name">Muh Ryan Ardiansyah</div>
+  </div>
+
+</aside>
+
+<!-- ═══════════════════════════════════
+     MAIN AREA
+═══════════════════════════════════ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="kantin-badge">
+        <span class="dot"></span>
+        Kantin UC Makassar
+      </span>
+      <div class="topbar-date" id="topbar-date"></div>
+    </div>
+    <div class="topbar-right">
+      <div class="status-badge status-online">
+        <span class="dot"></span> Online
+      </div>
+      <div class="status-badge status-offline">
+        <span class="dot"></span> Mode Offline Aktif
+      </div>
+      <div class="topbar-time" id="topbar-time"></div>
+      <div class="topbar-avatar"><i class="fas fa-user"></i></div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- MENU PANEL -->
+    <div class="menu-panel">
+
+      <!-- Search -->
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Cari Menu..." oninput="filterMenu()"/>
+      </div>
+
+      <!-- Filter Kategori -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="setFilter('Semua', this)">Semua</button>
+        <button class="filter-tab" onclick="setFilter('Makanan', this)">Makanan</button>
+        <button class="filter-tab" onclick="setFilter('Minuman', this)">Minuman</button>
+        <button class="filter-tab" onclick="setFilter('Snack', this)">Snack</button>
+      </div>
+
+      <!-- Grid Menu -->
+      <div class="menu-grid" id="menuGrid"></div>
+
+    </div>
+
+    <!-- CART PANEL -->
+    <div class="cart-panel">
+
+      <div class="cart-header">
+        <div>
+          <h3>Keranjang</h3>
+          <div class="trx-id" id="trxId"></div>
+        </div>
+        <button class="kosongkan-btn" onclick="clearCart()">Kosongkan</button>
+      </div>
+
+      <div class="cart-items" id="cartItems">
+        <!-- Diisi oleh JavaScript -->
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-summary">
+          <div class="cart-row">
+            <span class="label">Subtotal</span>
+            <span class="val" id="subtotalVal">Rp 0</span>
+          </div>
+          <div class="cart-row">
+            <span class="label">Diskon</span>
+            <span class="val diskon" id="diskonVal">-Rp 0</span>
+          </div>
+        </div>
+        <div class="cart-total">
+          <span class="label">Total</span>
+          <span class="val" id="totalVal">Rp 0</span>
+        </div>
+        <button class="btn-bayar" id="btnBayar" onclick="openConfirmModal()" disabled>
+          <i class="fas fa-print"></i> Bayar & Cetak Struk
+        </button>
+        <button class="info-wa">
+          <i class="fab fa-whatsapp"></i> Notifikasi WA otomatis ke pemilik
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MODAL KONFIRMASI
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal">
+    <div class="modal-icon confirm"><i class="fas fa-receipt"></i></div>
+    <h3>Konfirmasi Pembayaran</h3>
+    <div class="modal-amount" id="modalAmount">Rp 0</div>
+
+    <!-- METODE PEMBAYARAN -->
+     <div class="modal-section-label">Metode Pembayaran</div>
+     <div class="modal-pay-methods">
+      <button class="pay-method-btn active" onclick="selectPayMethod(this, 'Tunai')">
+        <i class="fas fa-money-bill-wave"></i> Tunai
+      </button>
+      <button class="pay-method-btn coming-soon" onclick="showComingSoon()">
+        <i class="fas fa-qrcode"></i> QRIS 
+      </button>
+      <button class="pay-method-btn coming-soon" onclick="showComingSoon()">
+        <i class="fas fa-university"></i> Transfer Bank
+      </button>
+     </div>
+
+     <!-- INPUT NOMINAL TUNAI -->
+    <div class="modal-cash-section" id="cashSection">
+      <div class="modal-section-label">Uang Diterima</div>
+      <input
+        type="number"
+        id="cashInput"
+        class="modal-cash-input"
+        placeholder="Masukan nominal..."
+        oninput="hitungKembalian()"
+      />
+      <div class="modal-kembalian" id="kembalianBox" style="display:none;">
+        <span>Kembalian</span>
+        <span id="kembalianVal" class="kembalian-val">Rp 0</span>
+      </div>
+      <div class="modal-kurang" id="kurangBox" style="display:none;">
+        <span>Uang Kurang</span>
+        <span id="kurangVal" class="kurang-val">Rp 0</span>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" onclick="closeConfirmModal()">Batal</button>
+      <button class="modal-btn-confirm" id="btnKonfirmasi" onclick="confirmPayment()">
+        <i class="fas fa-print"></i> Proses & Cetak Struk
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MODAL SUKSES
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="modal-icon success"><i class="fas fa-check"></i></div>
+    <h3>Transaksi Berhasil!</h3>
+    <div class="modal-amount" id="successAmount">Rp 0</div>
+    <p>Struk telah dicetak. Terima kasih!</p>
+    <div class="modal-actions">
+      <button class="modal-btn-print" onclick="printStruk()">
+        <i class="fas fa-print"></i> Cetak Struk
+      </button>
+      <button class="modal-btn-new" onclick="newTransaction()">Transaksi Baru</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST NOTIFIKASI -->
+<div class="toast" id="toast"></div>
+
+<!-- STRUK PRINT -->
+<!-- STRUK PRINT -->
+<div id="strukPrint" class="struk-print">
+
+  <!-- HEADER -->
+  <div class="struk-logo">🧾 KasirTa'</div>
+  <div class="struk-toko">Kantin UC Makassar</div>
+  <div class="struk-alamat">Universitas Ciputra Makassar</div>
+  <div class="struk-divider">================================</div>
+
+  <!-- META TRANSAKSI -->
+  <div class="struk-row">
+    <span>No. Transaksi</span>
+    <span id="struk-trxid"></span>
+  </div>
+  <div class="struk-row">
+    <span>Tanggal</span>
+    <span id="struk-tanggal"></span>
+  </div>
+  <div class="struk-row">
+    <span>Kasir</span>
+    <span>Muh Ryan Ardiansyah</span>
+  </div>
+  <div class="struk-divider">================================</div>
+
+  <!-- ITEM BELANJA -->
+  <div id="struk-items" class="struk-items"></div>
+  <div class="struk-divider">--------------------------------</div>
+
+  <!-- RINGKASAN PEMBAYARAN -->
+  <div class="struk-row">
+    <span>Subtotal</span>
+    <span id="struk-subtotal"></span>
+  </div>
+  <div class="struk-row">
+    <span>Diskon</span>
+    <span>Rp 0</span>
+  </div>
+  <div class="struk-divider">================================</div>
+  <div class="struk-row grand">
+    <span>TOTAL</span>
+    <span id="struk-total"></span>
+  </div>
+  <div class="struk-row" id="struk-diterima-row">
+    <span>Uang Diterima</span>
+    <span id="struk-diterima"></span>
+  </div>
+  <div class="struk-row struk-kembalian" id="struk-kembalian-row">
+    <span>Kembalian</span>
+    <span id="struk-kembalian"></span>
+  </div>
+  <div class="struk-row">
+    <span>Metode Bayar</span>
+    <span id="struk-metode"></span>
+  </div>
+  <div class="struk-divider">================================</div>
+
+  <!-- FOOTER -->
+  <div class="struk-footer">
+    <div>Terima kasih sudah berkunjung!</div>
+    <div>Powered by KasirTa'</div>
+  </div>
+
+</div>
+
+<!-- JavaScript -->
+<script src="app.js"></script>
+
+</body>
+</html>
